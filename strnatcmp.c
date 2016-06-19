@@ -32,6 +32,7 @@
 
 #include <stddef.h>	/* size_t */
 #include <ctype.h>
+#include <string.h>
 
 #include "strnatcmp.h"
 
@@ -145,7 +146,7 @@ strnatcmp0(nat_char const *a, nat_char const *b, int fold_case)
 	  if (!ca && !cb) {
 	       /* The strings compare the same.  Perhaps the caller
                   will want to call strcmp to break the tie. */
-	       return 0;
+	       return strcmp(a, b);
 	  }
 
 	  if (fold_case) {
