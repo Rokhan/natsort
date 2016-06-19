@@ -1,6 +1,6 @@
 /* -*- mode: c; c-file-style: "k&r" -*-
 
-  strnatcmp.c -- Perform 'natural order' comparisons of strings in C.
+  strnatcmp.h -- Perform 'natural order' comparisons of strings in C.
   Copyright (C) 2000, 2004 by Martin Pool <mbp sourcefrog net>
 
   This software is provided 'as-is', without any express or implied
@@ -21,11 +21,13 @@
 */
 
 
-/* CUSTOMIZATION SECTION
- *
- * You can change this typedef, but must then also change the inline
- * functions in strnatcmp.c */
-typedef char nat_char;
+namespace natsort
+{
+	typedef char nat_char;
 
-int strnatcmp(nat_char const *a, nat_char const *b);
-int strnatcasecmp(nat_char const *a, nat_char const *b);
+	// Case sensitive
+	int strcmp(nat_char const *a, nat_char const *b);
+	
+	// case insensitive
+	int strcmpi(nat_char const *a, nat_char const *b);
+}

@@ -1,6 +1,6 @@
 /* -*- mode: c; c-file-style: "k&r" -*-
 
-   natsort.c -- Example strnatcmp application.
+   natsort.cpp -- Example strnatcmp application.
    
    Copyright (C) 2000 by Martin Pool <mbp@humbug.org.au>
 
@@ -25,8 +25,6 @@
  *
  * 2003-03-18: Add --reverse option, from Alessandro Pisani.
  */
-
-#define _GNU_SOURCE
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,9 +62,9 @@ static int compare_strings(const void *a, const void *b)
      int ret;
 
      if (fold_case)
-	  ret = strnatcasecmp(pa, pb);
+	  ret = natsort::strcmpi(pa, pb);
      else
-	  ret = strnatcmp(pa, pb);
+	  ret = natsort::strcmp(pa, pb);
 
 	 if (reverse)
 	  ret *= -1;

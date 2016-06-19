@@ -1,6 +1,6 @@
 /* -*- mode: c; c-file-style: "k&r" -*-
 
-  strnatcmp.c -- Perform 'natural order' comparisons of strings in C.
+  strnatcmp.cpp -- Perform 'natural order' comparisons of strings in C.
   Copyright (C) 2000, 2004 by Martin Pool <mbp sourcefrog net>
 
   This software is provided 'as-is', without any express or implied
@@ -36,6 +36,7 @@
 
 #include "strnatcmp.h"
 
+using natsort::nat_char;
 
 /* These are defined as macros to make it easier to adapt this code to
  * different characters types or comparison functions. */
@@ -165,14 +166,12 @@ strnatcmp0(nat_char const *a, nat_char const *b, int fold_case)
 }
 
 
-int
-strnatcmp(nat_char const *a, nat_char const *b) {
+int natsort::strcmp(nat_char const *a, nat_char const *b) {
      return strnatcmp0(a, b, 0);
 }
 
 
 /* Compare, recognizing numeric string and ignoring case. */
-int
-strnatcasecmp(nat_char const *a, nat_char const *b) {
+int natsort::strcmpi(nat_char const *a, nat_char const *b) {
      return strnatcmp0(a, b, 1);
 }
