@@ -27,7 +27,7 @@
  * 2003-03-18: Add --reverse option, from Alessandro Pisani.
  */
 
-#include "strnatcmp.h"
+#include "natsort/strnatcmp.h"
 
 
 #include <boost/program_options.hpp>

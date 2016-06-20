@@ -35,7 +35,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#include "strnatcmp.h"
+#include "natsort/strnatcmp.h"
 
 using natsort::nat_char;
 

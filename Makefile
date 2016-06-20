@@ -1,4 +1,4 @@
-CXXFLAGS = -Wall -g -Werror -std=c++11
+CXXFLAGS = -Wall -g -Werror -std=c++11 -I.
 
 OBJS = src/strnatcmp.o src/natsort.o
 

@@ -20,8 +20,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\strnatcmp.h">
-      <Filter>Fichiers sources</Filter>
+    <ClInclude Include="..\..\natsort\strnatcmp.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
