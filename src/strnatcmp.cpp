@@ -23,6 +23,7 @@
 
 /* partial change history:
  *
+ * 2016-06-20: Compilation with visual studio, by Sebastien Mirabel
  * 2004-10-10 mbp: Lift out character type dependencies into macros.
  *
  * Eric Sosman pointed out that ctype functions take a parameter whose

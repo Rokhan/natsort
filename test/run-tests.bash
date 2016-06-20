@@ -1,12 +1,12 @@
 run_test() {
-	diff -u "$1" <( ./natsort < "$2" ) && return
-	echo "Test failed for input file '$2'"
+	diff --strip-trailing-cr -u "$2" <( "$1" < "$3" ) && return
+	echo "Test failed for input file '$3'"
 	exit 1
 }
 
-run_test sorted-dates     test-dates
-run_test sorted-fractions test-fractions
-run_test sorted-words     test-words
+run_test "$1" sorted-dates     test-dates
+run_test "$1" sorted-fractions test-fractions
+run_test "$1" sorted-words     test-words
 
 echo "All tests passed"
 exit 0

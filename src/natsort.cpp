@@ -23,19 +23,26 @@
 
 /* Partial change history:
  *
+ * 2016-06-20: Compilation with visual studio, by Sebastien Mirabel
  * 2003-03-18: Add --reverse option, from Alessandro Pisani.
  */
+
+#include "strnatcmp.h"
+
+
+#include <boost/program_options.hpp>
+
+#include <iostream>
+#include <string>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <getopt.h>
 
-#include "strnatcmp.h"
+using std::string;
+using std::vector;
 
-#if defined(__GNUC__)
-#  define UNUSED __attribute__((__unused__))
-#endif
+namespace po = boost::program_options;
 
 static int fold_case = 0, verbose = 0, reverse = 0;
 
@@ -55,10 +62,9 @@ static void trace_result(char const *a, char const *b, int ret)
 }
 
 
-
-static int compare_strings(const void *a, const void *b)
+static bool compare_strings(const string& a, const string& b)
 {
-     char const *pa = *(char const **)a, *pb = *(char const **)b;
+     char const *pa = a.c_str(), *pb = b.c_str();
      int ret;
 
      if (fold_case)
@@ -72,96 +78,66 @@ static int compare_strings(const void *a, const void *b)
 	 if (verbose)
 	  trace_result(pa, pb, ret);
 
-     return ret;
-}
-
-
-static void usage(void)
-{
-     fprintf(stderr, "Usage: natsort [OPTIONS]\n"
-	     "Performs a natural sort on standard input, and writes to \n"
-	     "standard output.\n"
-	     "\n"
-	     "  --help, -h       show help text\n"
-	     "  --verbose, -v    show comparisons\n"
-	     "  --fold-case, -f  ignore case differences for letters\n"
-		 "  --reverse, -r	 reverse the result of comparisons\n");
+     return ret < 0;
 }
 
 
 int main(int argc, char **argv)
 {
-     int nlines = 0;
-     char *line;
-     char **list = 0;
-     int linelen = 0, i;
-     int c, opt_ind;
-     size_t bufsize;
+    vector<string> list;
 
-     static struct option long_options[] = {
-	  { "verbose", 0, NULL, 'v'},
-	  { "reverse", 0, NULL, 'r'},
-	  { "fold-case", 0, NULL, 'f'},
-	  { "help", 0, 0, 'h' },
-	  { 0, 0, 0, 0 }
-     };
+    po::options_description desc(
+        "Usage: natsort [OPTIONS]\n"
+        "Performs a natural sort on standard input, and writes to standard output");
 
-     /* process arguments */
-     while ((c = getopt_long(argc, argv, "frvh", long_options, &opt_ind)) != -1) {	  
-	  switch (c) {
-	  case 'f':
-	       fold_case = 1;
-	       break;
-	  case 'h':
-	       usage();
-	       return 0;
-	  case 'r':
-	  	   reverse = 1;
-		   break;
-	  case 'v':
-	       verbose = 1;
-	       break;
-	  case '?':
-	       return 1;
-	  default:
-	       abort();
-	  }
-     }	       
-     
-     /* read lines into an array */
-     while (1) {
-	  line = NULL;
-	  bufsize = 0;
-	  if ((linelen = getline(&line, &bufsize, stdin)) <= 0)
-	       break;
-	  if (line[linelen-1] == '\n')
-	       line[--linelen] = 0;
-	  nlines++;
-	  list = (char **) realloc(list, nlines * sizeof list[0]);
-	  if (!list) {
-	       perror("allocate list");
-	       return 1;
-	  }	       
-	  list[nlines-1] = line;
-     }
+    desc.add_options()
+        ("help,h", "show help text")
+        ("verbose,v", "show comparisons")
+        ("reverse,r", "reverse the result of comparisons")
+        ("fold-case,f", "ignore case differences for letters");
 
-     if (ferror(stdin)) {
-	  perror("input");
-	  return 1;
-     }
-     fclose(stdin);
-     
-     /* quicksort */
-     qsort(list, nlines, sizeof list[0], compare_strings);
-     
-     /* and output */
-     for (i = 0; i < nlines; i++) {
-	  puts(list[i]);
-     }
-     if (ferror(stdout)) {
-	  perror("output");
-	  return 1;
-     }
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
 
-     return 0;
+    if(vm.count("fold-case"))
+    {
+        fold_case = 1;
+    }
+
+    if(vm.count("help"))
+    {
+        std::cout << desc << "\n";
+        return 0;
+    }
+
+    if(vm.count("reverse"))
+    {
+        reverse = 1;
+    }
+
+    if(vm.count("verbose"))
+    {
+        verbose = 1;
+    }
+
+    /* read lines into an array */
+    while(1)
+    {
+        string line;
+        if(!std::getline(std::cin, line))
+            break;
+
+        list.push_back(line);
+    }
+
+    std::sort(list.begin(), list.end(), compare_strings);
+
+    /* and output */
+    for(const auto& elt : list)
+    {
+        std::cout << elt << '\n';
+    }
+
+    return 0;
 }

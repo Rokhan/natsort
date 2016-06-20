@@ -1,3 +1,11 @@
-strnatcmp.o
-natsort.o
+src/strnatcmp.o
+src/natsort.o
 natsort
+natsort.opensdf
+natsort.sdf
+Debug
+Release
+win/NatsortExe/Debug
+win/NatsortLib/Debug
+win/NatsortExe/Release
+win/NatsortLib/Release
